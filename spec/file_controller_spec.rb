@@ -10,6 +10,10 @@ RSpec.describe FileController do
 
     file_name = FileController.start_file('BOLETO')
 
-    expect(File.read("./arquivos/EMISSAO/#{file_name}")).to eq('H00002' + $/)
+    expect(File.read("./arquivos/EMISSAO/#{file_name}")).to eq(
+            "H00002\n"\
+            "Ba123456b20210503        000001234501\n"\
+            "Bc654335d20210405        000001000001\n"\
+            "F000000000022345")
   end
 end

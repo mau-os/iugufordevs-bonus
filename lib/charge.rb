@@ -38,4 +38,8 @@ class Charge
   def self.clear
     @@charges = []
   end
+
+  def to_file
+    "#{token}#{expiration_date}        #{"%010d" % amount}01"
+  end
 end
