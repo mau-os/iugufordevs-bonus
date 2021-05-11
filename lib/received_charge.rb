@@ -1,9 +1,11 @@
 class ReceivedCharge < Charge
+  attr_accessor :payment_date, :status
   @@received_charges = []
 
-  def initialize(token:, expiration_date:, amount:, payment_method:, payment_date: 0)
-    super(token: token, expiration_date: expiration_date, amount: amount, payment_method: payment_method)
+  def initialize(token:, expiration_date:, amount:, payment_date:, status:)
+    super(token: token, expiration_date: expiration_date, amount: amount)
     @payment_date = payment_date
+    @status = status
     @@received_charges << self
   end
 
@@ -11,12 +13,8 @@ class ReceivedCharge < Charge
     @@received_charges
   end
 
-  def self.all_payment_methods
-    super(@@received_charges)
-  end
-
-  def self.list_by_payment_method(payment_method)
-    super(payment_method: payment_method, list: @@received_charges)
+  def self.sum
+    @@received_charges.map(&:amount).sum
   end
 
   def self.clear

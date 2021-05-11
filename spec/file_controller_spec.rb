@@ -16,4 +16,16 @@ RSpec.describe FileController do
             "Bc654335d20210405        000001000001\n"\
             "F000000000022345")
   end
+
+  it 'reads identify return charges files' do
+    FileUtils.cp('./spec/fixtures/OK/20210511-BOLETO_RETORNO.txt', './arquivos/RETORNO')
+
+    expect(FileController.list_return_files).to include('./arquivos/RETORNO/20210511-BOLETO_RETORNO.txt')
+  end
+
+  it 'validates quantity and value of records' do
+    expect(FileController.validates('./spec/fixtures/wrong_quantity/20210511-BOLETO_RETORNO.txt')).to be false
+    expect(FileController.validates('./spec/fixtures/wrong_value/20210511-BOLETO_RETORNO.txt')).to be false
+    expect(FileController.validates('./spec/fixtures/OK/20210511-BOLETO_RETORNO.txt')).to be true
+  end
 end
