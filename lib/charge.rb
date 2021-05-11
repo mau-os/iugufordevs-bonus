@@ -3,28 +3,19 @@ require 'active_support/inflector'
 class Charge
   attr_accessor :token, :expiration_date, :amount, :payment_method
 
-  @@charges = []
-
-  def initialize( token:, expiration_date:, amount:, payment_method:, payment_date: 0)
+  def initialize(token:, expiration_date:, amount:, payment_method:)
     @token = token
     @expiration_date = expiration_date
     @amount = amount
     @payment_method = payment_method.parameterize(separator: '_').upcase
-    @payment_date = payment_date
-
-    @@charges << self
   end
 
-  def self.all
-    @@charges
+  def self.all_payment_methods(list)
+    list.map(&:payment_method).uniq
   end
 
-  def self.all_payment_methods
-    @@charges.map(&:payment_method).uniq
-  end
-
-  def self.list_by_payment_method(payment_method)
-    all.select { |e| e.payment_method == payment_method}
+  def self.list_by_payment_method(payment_method:, list:)
+    list.select { |e| e.payment_method == payment_method}
   end
 
   def self.count_by_payment_method(payment_method)
@@ -33,13 +24,5 @@ class Charge
 
   def self.sum_by_payment_method(payment_method)
     list_by_payment_method(payment_method).map(&:amount).sum
-  end
-
-  def self.clear
-    @@charges = []
-  end
-
-  def to_file
-    "#{token}#{expiration_date}        #{"%010d" % amount}01"
   end
 end
